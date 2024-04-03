@@ -8,7 +8,7 @@ export const Accordion: FC<Props> = ({ children, title }) => {
     const [open, setOpen] = useState(false);
 
     return <div className='mb-6'>
-        <div className="mb-2 cursor-pointer flex items-center gap-3" onClick={() => setOpen(!open)}>
+        <div className="mb-2 cursor-pointer flex items-center gap-2" onClick={() => setOpen(!open)}>
             <span className='text-xs w-6 h-3'>
                 {open ? "▼" : "▶"}
             </span>
