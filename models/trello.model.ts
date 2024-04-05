@@ -31,3 +31,15 @@ export type TrelloMember = {
     idBoards: string[],
     idOrganizations: string[],
 }
+
+export type TrelloTableView = {
+    name: string
+    board: string
+    column: string
+}
+
+export type TrelloBoardView = {
+    board: TrelloBoard,
+    cards: TrelloCard[],
+    lists: TrelloList[]
+}
