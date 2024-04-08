@@ -1,5 +1,5 @@
 import { ColumnDef, SortingState, flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { MdArrowDownward, MdArrowUpward } from 'react-icons/md'
 
 type Props<T> = {
@@ -21,10 +21,6 @@ function TableWrapper<T>({ data, columns }: Props<T>) {
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 	})
-
-	useEffect(() => {
-		console.log({ sorting });
-	}, [sorting]);
 
 	return (
 		<>

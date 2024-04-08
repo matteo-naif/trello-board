@@ -36,6 +36,7 @@ export type TrelloTableView = {
     name: string
     board: string
     column: string
+    url: string
 }
 
 export type TrelloBoardView = {

@@ -32,8 +32,12 @@ export const DashboardPage: FC<Props> = ({ tableRows, personalData, items }) => 
             </div>
 
             <div>
-                <button onClick={() => setSectionActive('table')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'table' ? ' bg-white' : '')} >Table</button>
-                <button onClick={() => setSectionActive('boards')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'boards' ? ' bg-white' : '')} >Boards</button>
+                <button onClick={() => setSectionActive('table')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'table' ? ' bg-white' : '')} >
+                    Tabella
+                </button>
+                <button onClick={() => setSectionActive('boards')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'boards' ? ' bg-white' : '')} >
+                    Tutte le board
+                </button>
             </div>
 
             {sectionActive === 'table' && <TableView data={tableRows} />}
