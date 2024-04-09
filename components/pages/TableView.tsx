@@ -2,6 +2,7 @@
 
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { TrelloTableView } from '@/models/trello.model';
+import { getStatusColor } from '@/utils/color.util';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { MdLaunch } from 'react-icons/md';
@@ -96,6 +97,13 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
                 accessorKey: 'column',
                 header: "Stato",
                 size: 100,
+                cell: (info) => (
+                    <div
+                        style={{ backgroundColor: getStatusColor(info.row.original.column) }}
+                        className='px-2 py-1 inline rounded-xl text-white'>
+                        {info.row.original.column}
+                    </div>
+                )
             },
             {
                 accessorKey: 'url',
@@ -152,8 +160,10 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
                                         type="checkbox"
                                         checked={filterStatusApplied.includes(status)}
                                         value={status}
-                                        onChange={(e) => applyFilters('status', e.target.value)} />
-                                    <span className='ml-1'>{status}</span>
+                                        onChange={(e) => applyFilters('status', e.target.value)}
+                                    />
+                                    <div className='h-2 w-2 rounded-full' style={{ backgroundColor: getStatusColor(status) }} />
+                                    <span>{status}</span>
                                 </label>
                             </div>
                             )}

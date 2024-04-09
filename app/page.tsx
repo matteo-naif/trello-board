@@ -23,6 +23,7 @@ export default async function Home() {
 
     // Ciclo le board per recuperare le liste e le card
     for (const board of boards) {
+
       // https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-lists-get
       let { data: lists } = await axios.get<TrelloList[]>(`https://api.trello.com/1/boards/${board.id}/lists?key=${apiKey}&token=${token}`);
 
@@ -31,7 +32,6 @@ export default async function Home() {
 
       // Filtro le card che non sono assegnate a me
       cards = cards.filter(card => card.idMembers.includes(member.id));
-
 
       // popolo il field della dashboard tabella
       cards.forEach(card => {
