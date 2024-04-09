@@ -70,7 +70,7 @@ function TableWrapper<T>({ data, columns }: Props<T>) {
 						{table.getRowModel().rows.map(row => (
 							<tr key={row.id} >
 								{row.getVisibleCells().map(cell => (
-									<td key={cell.id} className='whitespace-nowrap px-3 py-4 text-sm text-gray-500' >
+									<td key={cell.id} className='whitespace-nowrap px-3 py-4 text-sm text-black' >
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</td>
 								))}
