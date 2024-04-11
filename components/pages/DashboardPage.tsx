@@ -3,6 +3,7 @@
 import { TrelloBoardView, TrelloMember, TrelloTableView } from '@/models/trello.model';
 import { FC, useState } from 'react';
 
+import { TimeConverter } from '../TimeConverter';
 import { BoardView } from './BoardView';
 import { TableView } from './TableView';
 
@@ -18,6 +19,8 @@ export const DashboardPage: FC<Props> = ({ tableRows, personalData, items }) => 
     const [sectionActive, setSectionActive] = useState<SectionTypeModel>('table');
 
     return <>
+
+        <TimeConverter />
 
         <div className="bg-gray-100 p-6 min-h-screen">
 
