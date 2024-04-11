@@ -1,5 +1,5 @@
 import { DashboardPage } from "@/components/pages/DashboardPage";
-import { TrelloBoard, TrelloBoardView, TrelloCard, TrelloList, TrelloMember, TrelloTableView } from "@/models/trello.model";
+import { TrelloBoard, TrelloBoardView, TrelloCard, TrelloList, TrelloMember, TrelloMemberSmall, TrelloTableView } from "@/models/trello.model";
 import axios from "axios";
 
 export default async function Home() {
@@ -7,6 +7,7 @@ export default async function Home() {
   let items: TrelloBoardView[] = [];
   let personalData: TrelloMember | null = null
   let tableRows: TrelloTableView[] = []
+  let memberList: TrelloMemberSmall[] = [];
 
   const apiKey = process.env.TRELLO_API;
   const token = process.env.TRELLO_TOKEN;
@@ -30,8 +31,16 @@ export default async function Home() {
       // https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-cards-get
       let { data: cards } = await axios.get<TrelloCard[]>(`https://api.trello.com/1/boards/${board.id}/cards?key=${apiKey}&token=${token}`);
 
+      let { data: members } = await axios.get<TrelloMemberSmall[]>(`https://api.trello.com/1/boards/${board.id}/members?key=${apiKey}&token=${token}`);
+
+      // Tengo traccia univoca dei membri presenti nelle varie board
+      members.forEach(member => {
+        const memberFound = memberList.find(m => m.id === member.id);
+        if (memberFound === undefined) memberList.push(member)
+      })
+
       // Filtro le card che non sono assegnate a me
-      cards = cards.filter(card => card.idMembers.includes(member.id));
+      // cards = cards.filter(card => card.idMembers.includes(member.id));
 
       // popolo il field della dashboard tabella
       cards.forEach(card => {
@@ -40,7 +49,8 @@ export default async function Home() {
           name: card.name,
           board: board.name,
           column: lists.find(list => list.id === card.idList)?.name || '',
-          url: card.url
+          url: card.url,
+          idMembers: card.idMembers
         })
 
       })
@@ -55,5 +65,5 @@ export default async function Home() {
 
   }
 
-  return <DashboardPage personalData={personalData} tableRows={tableRows} items={items} />
+  return <DashboardPage personalData={personalData} tableRows={tableRows} items={items} memberList={memberList} />
 }

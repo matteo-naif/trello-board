@@ -1,7 +1,7 @@
 "use client"
 
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { TrelloTableView } from '@/models/trello.model';
+import { TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
 import { getStatusColor } from '@/utils/color.util';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -9,15 +9,18 @@ import { MdLaunch } from 'react-icons/md';
 import { TableWrapper } from '../TableWrapper';
 
 type Props = {
-    data: TrelloTableView[]
+    data: TrelloTableView[],
+    memberList: TrelloMemberSmall[]
 }
 
-export const TableView: FC<Props> = ({ data: dataProps }) => {
+export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
     const [data, setData] = useState<TrelloTableView[]>([...dataProps])
 
     const [status, setStatus] = useState<string[]>([])
     const [filterStatusApplied, setFilterStatusApplied] = useLocalStorage<string[]>('filterStatusApplied', [])
+
+    const [filterMembersApplied, setFilterMembersApplied] = useLocalStorage<string[]>('filterMembersApplied', [])
 
     const [boardList, setBoardList] = useState<string[]>([])
     const [filterBoardApplied, setFilterBoardApplied] = useLocalStorage<string>('filterBoardApplied', "")
@@ -37,7 +40,7 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
 
     }, [dataProps])
 
-    const applyFilters = (type: 'board' | 'status', value: string) => {
+    const applyFilters = (type: 'board' | 'status' | 'member', value: string) => {
 
         if (type === 'status') {
 
@@ -54,6 +57,22 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
             // Aggiorno lo stato dei filtri applicati
             setFilterStatusApplied(filterStatusAppliedLocal)
 
+        }
+
+        if (type === 'member') {
+
+            let filterMembersAppliedLocal = [...filterMembersApplied];
+
+            if (filterMembersApplied.includes(value)) {
+                // Se nel filtro c'è più vuol dire che devo toglierlo
+                filterMembersAppliedLocal = filterMembersAppliedLocal.filter(member => member !== value)
+            } else {
+                // Se non c'è più vuol dire che devo aggiungerlo
+                filterMembersAppliedLocal.push(value)
+            }
+
+            // Aggiorno lo stato dei filtri applicati
+            setFilterMembersApplied(filterMembersAppliedLocal)
         }
 
         if (type === 'board') {
@@ -74,13 +93,17 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
             data = data.filter(({ column }) => filterStatusApplied.includes(column))
         }
 
+        if (filterMembersApplied.length > 0) {
+            data = data.filter(({ idMembers }) => idMembers.some(member => filterMembersApplied.includes(member)))
+        }
+
         if (filterBoardApplied !== "") {
             data = data.filter(({ board }) => filterBoardApplied.includes(board))
         }
 
         setData(data)
 
-    }, [filterBoardApplied, filterStatusApplied])
+    }, [filterBoardApplied, filterStatusApplied, filterMembersApplied])
 
     const columns = useMemo<ColumnDef<TrelloTableView>[]>(
         () => [
@@ -92,6 +115,12 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
             {
                 accessorKey: 'name',
                 header: "Ticket",
+                cell: (info) => (<>
+                    <p>{info.row.original.name}</p>
+                    {/* Visualizzo i member assegnati */}
+                    <small>{info.row.original.idMembers.map((member) => memberList.find(m => m.id === member)?.fullName).join(', ')}</small>
+                </>
+                )
             },
             {
                 accessorKey: 'column',
@@ -153,9 +182,9 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
 
                         {/* Status */}
                         <div className='my-6' >
-                            <p className='font-bold mb-2'>Filtra per stato</p>
-                            {status.map(status => <div className='block'>
-                                <label key={status} className='flex gap-2 py-1 items-center'>
+                            <p className='font-bold mb-2'>Stato ticket</p>
+                            {status.map(status => <div className='block' key={status}>
+                                <label className='flex gap-2 py-1 items-center'>
                                     <input
                                         type="checkbox"
                                         checked={filterStatusApplied.includes(status)}
@@ -172,11 +201,28 @@ export const TableView: FC<Props> = ({ data: dataProps }) => {
 
                         {/* Board */}
                         <div className='my-6' >
-                            <p className='font-bold mb-2'>Filtra per Board</p>
+                            <p className='font-bold mb-2'>Board</p>
                             <select className='min-w-52' onChange={e => applyFilters('board', e.target.value)} value={filterBoardApplied}>
                                 <option value={""}>Tutte le board</option>
                                 {boardList.map(board => <option key={board} value={board} >{board}</option>)}
                             </select>
+                        </div>
+
+                        {/* members */}
+                        <div className='my-6'>
+                            <p className='font-bold mb-2'>Utenti</p>
+                            {memberList.map(member => <div className='block' key={member.id}>
+                                <label className='flex gap-2 py-1 items-center'>
+                                    <input
+                                        type="checkbox"
+                                        checked={filterMembersApplied.includes(member.id)}
+                                        value={member.id}
+                                        onChange={(e) => applyFilters('member', e.target.value)}
+                                    />
+                                    <span>{member.fullName}</span>
+                                </label>
+                            </div>
+                            )}
                         </div>
 
                     </div>

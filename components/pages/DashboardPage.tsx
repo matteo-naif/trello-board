@@ -1,6 +1,6 @@
 "use client"
 
-import { TrelloBoardView, TrelloMember, TrelloTableView } from '@/models/trello.model';
+import { TrelloBoardView, TrelloMember, TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
 import { FC, useState } from 'react';
 
 import { TimeConverter } from '../TimeConverter';
@@ -12,10 +12,12 @@ type SectionTypeModel = 'boards' | 'table'
 type Props = {
     tableRows: TrelloTableView[],
     personalData: TrelloMember | null,
-    items: TrelloBoardView[]
+    items: TrelloBoardView[],
+    memberList: TrelloMemberSmall[]
 }
 
-export const DashboardPage: FC<Props> = ({ tableRows, personalData, items }) => {
+export const DashboardPage: FC<Props> = ({ tableRows, personalData, items, memberList }) => {
+
     const [sectionActive, setSectionActive] = useState<SectionTypeModel>('table');
 
     return <>
@@ -43,7 +45,7 @@ export const DashboardPage: FC<Props> = ({ tableRows, personalData, items }) => 
                 </button>
             </div>
 
-            {sectionActive === 'table' && <TableView data={tableRows} />}
+            {sectionActive === 'table' && <TableView data={tableRows} memberList={memberList} />}
             {sectionActive === 'boards' && <BoardView items={items} />}
 
         </div>

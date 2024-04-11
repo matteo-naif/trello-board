@@ -32,11 +32,18 @@ export type TrelloMember = {
     idOrganizations: string[],
 }
 
+export type TrelloMemberSmall = {
+    id: string,
+    fullName: string,
+    username: string,
+}
+
 export type TrelloTableView = {
     name: string
     board: string
     column: string
     url: string
+    idMembers: string[]
 }
 
 export type TrelloBoardView = {
