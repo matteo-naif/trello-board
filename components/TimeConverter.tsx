@@ -26,7 +26,7 @@ export const TimeConverter: FC<Props> = () => {
 
     return <>
 
-        <div className={'fixed block top-2 transition-transform right-0 z-10' + (isVisible && ' translate-x-96')}>
+        <div className={'fixed block top-2 transition-transform right-0 z-10' + (!isVisible && ' translate-x-96')}>
 
             <div className='flex gap-0 items-center'>
 
