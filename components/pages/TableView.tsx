@@ -182,9 +182,14 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                         {/* Status */}
                         <div className='my-6' >
-                            <p className='font-bold mb-2'>Stato ticket</p>
+                            <p className='font-bold mb-2'>Stato ticket
+                                {filterStatusApplied.length > 0 && <button
+                                    onClick={() => setFilterStatusApplied([])}
+                                    className='text-gray-400 font-normal underline ml-2'
+                                >Rimuovi filtro</button>}
+                            </p>
                             {status.map(status => <div className='block' key={status}>
-                                <label className='flex gap-2 py-1 items-center'>
+                                <label className='flex gap-2 py-1 items-center cursor-pointer'>
                                     <input
                                         type="checkbox"
                                         checked={filterStatusApplied.includes(status)}
@@ -201,7 +206,12 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                         {/* Board */}
                         <div className='my-6' >
-                            <p className='font-bold mb-2'>Board</p>
+                            <p className='font-bold mb-2'>Board
+                                {filterBoardApplied && <button
+                                    onClick={() => setFilterBoardApplied("")}
+                                    className='text-gray-400 font-normal underline ml-2'
+                                >Rimuovi filtro</button>}
+                            </p>
                             <select className='min-w-52' onChange={e => applyFilters('board', e.target.value)} value={filterBoardApplied}>
                                 <option value={""}>Tutte le board</option>
                                 {boardList.map(board => <option key={board} value={board} >{board}</option>)}
@@ -210,7 +220,12 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                         {/* members */}
                         <div className='my-6'>
-                            <p className='font-bold mb-2'>Utenti</p>
+                            <p className='font-bold mb-2'>Utenti
+                                {filterMembersApplied.length > 0 && <button
+                                    onClick={() => setFilterMembersApplied([])}
+                                    className='text-gray-400 font-normal underline ml-2'
+                                >Rimuovi filtro</button>}
+                            </p>
                             {memberList.map(member => <div className='block' key={member.id}>
                                 <label className='flex gap-2 py-1 items-center'>
                                     <input
