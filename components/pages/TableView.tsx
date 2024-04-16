@@ -6,6 +6,7 @@ import { getStatusColor } from '@/utils/color.util';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { MdLaunch } from 'react-icons/md';
+import { RemoveFilterButton } from '../RemoveFilterButton';
 import { TableWrapper } from '../TableWrapper';
 
 type Props = {
@@ -182,11 +183,9 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                         {/* Status */}
                         <div className='my-6' >
-                            <p className='font-bold mb-2'>Stato ticket
-                                {filterStatusApplied.length > 0 && <button
-                                    onClick={() => setFilterStatusApplied([])}
-                                    className='text-gray-400 font-normal underline ml-2'
-                                >Rimuovi filtro</button>}
+                            <p className='font-bold mb-2'>
+                                Stato ticket
+                                {filterStatusApplied.length > 0 && <RemoveFilterButton onClick={() => setFilterStatusApplied([])} />}
                             </p>
                             {status.map(status => <div className='block' key={status}>
                                 <label className='flex gap-2 py-1 items-center cursor-pointer'>
@@ -206,11 +205,9 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                         {/* Board */}
                         <div className='my-6' >
-                            <p className='font-bold mb-2'>Board
-                                {filterBoardApplied && <button
-                                    onClick={() => setFilterBoardApplied("")}
-                                    className='text-gray-400 font-normal underline ml-2'
-                                >Rimuovi filtro</button>}
+                            <p className='font-bold mb-2'>
+                                Board
+                                {filterBoardApplied && <RemoveFilterButton onClick={() => setFilterBoardApplied("")} />}
                             </p>
                             <select className='min-w-52' onChange={e => applyFilters('board', e.target.value)} value={filterBoardApplied}>
                                 <option value={""}>Tutte le board</option>
@@ -220,11 +217,9 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                         {/* members */}
                         <div className='my-6'>
-                            <p className='font-bold mb-2'>Utenti
-                                {filterMembersApplied.length > 0 && <button
-                                    onClick={() => setFilterMembersApplied([])}
-                                    className='text-gray-400 font-normal underline ml-2'
-                                >Rimuovi filtro</button>}
+                            <p className='font-bold mb-2'>
+                                Utenti
+                                {filterMembersApplied.length > 0 && <RemoveFilterButton onClick={() => setFilterMembersApplied([])} />}
                             </p>
                             {memberList.map(member => <div className='block' key={member.id}>
                                 <label className='flex gap-2 py-1 items-center'>
