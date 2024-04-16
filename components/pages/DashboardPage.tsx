@@ -3,6 +3,7 @@
 import { TrelloBoardView, TrelloMember, TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
 import { FC, useState } from 'react';
 
+import { useIsClient } from '@/hooks/useIsClient';
 import { TimeConverter } from '../TimeConverter';
 import { BoardView } from './BoardView';
 import { TableView } from './TableView';
@@ -18,7 +19,11 @@ type Props = {
 
 export const DashboardPage: FC<Props> = ({ tableRows, personalData, items, memberList }) => {
 
+    const isClient = useIsClient()
+
     const [sectionActive, setSectionActive] = useState<SectionTypeModel>('table');
+
+    if (!isClient) return <></>
 
     return <>
 
