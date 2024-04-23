@@ -50,7 +50,8 @@ export default async function Home() {
           board: board.name,
           column: lists.find(list => list.id === card.idList)?.name || '',
           url: card.url,
-          idMembers: card.idMembers
+          idMembers: card.idMembers,
+          description: card.desc
         })
 
       })

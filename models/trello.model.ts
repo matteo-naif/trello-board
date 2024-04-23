@@ -12,6 +12,7 @@ export type TrelloCard = {
     isTemplate: boolean
     idList: string
     idMembers: string[]
+    desc: string
 }
 
 export type TrelloList = {
@@ -44,6 +45,7 @@ export type TrelloTableView = {
     column: string
     url: string
     idMembers: string[]
+    description: string
 }
 
 export type TrelloBoardView = {

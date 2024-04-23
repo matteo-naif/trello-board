@@ -117,7 +117,7 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                 accessorKey: 'name',
                 header: "Ticket",
                 cell: (info) => (<>
-                    <p>{info.row.original.name}</p>
+                    <p title={info.row.original.description}>{info.row.original.name}</p>
                     {/* Visualizzo i member assegnati */}
                     <small>{info.row.original.idMembers.map((member) => memberList.find(m => m.id === member)?.fullName).join(', ')}</small>
                 </>
