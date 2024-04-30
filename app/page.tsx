@@ -1,10 +1,9 @@
 import { DashboardPage } from "@/components/pages/DashboardPage";
-import { TrelloBoardView, TrelloMemberSmall, TrelloTableView } from "@/models/trello.model";
+import { TrelloMemberSmall, TrelloTableView } from "@/models/trello.model";
 import { getBoardCards, getBoardLists, getBoardMembers, getBoards, getPersonalData } from "@/services/trello.service";
 
 export default async function Home() {
 
-  let boardViewData: TrelloBoardView[] = [];
   let tableViewData: TrelloTableView[] = []
   let memberList: TrelloMemberSmall[] = [];
 
@@ -42,14 +41,11 @@ export default async function Home() {
 
     tableViewData.push(...tableViewDataEntries);
 
-    // Aggiungi dati alla vista della board
-    boardViewData.push({ board, lists, cards })
   }
 
   return <DashboardPage
     personalData={currentMember}
     tableViewData={tableViewData}
-    boardViewData={boardViewData}
     memberList={memberList}
   />
 }

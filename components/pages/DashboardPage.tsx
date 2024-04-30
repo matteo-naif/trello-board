@@ -1,27 +1,21 @@
 "use client"
 
-import { TrelloBoardView, TrelloMember, TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
-import { FC, useState } from 'react';
+import { TrelloMember, TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
+import { FC } from 'react';
 
 import { useIsClient } from '@/hooks/useIsClient';
 import { TimeConverter } from '../TimeConverter';
-import { BoardView } from './BoardView';
 import { TableView } from './TableView';
-
-type SectionTypeModel = 'boards' | 'table'
 
 type Props = {
     tableViewData: TrelloTableView[],
     personalData: TrelloMember | null,
-    boardViewData: TrelloBoardView[],
     memberList: TrelloMemberSmall[]
 }
 
-export const DashboardPage: FC<Props> = ({ tableViewData, personalData, boardViewData, memberList }) => {
+export const DashboardPage: FC<Props> = ({ tableViewData, personalData, memberList }) => {
 
     const isClient = useIsClient()
-
-    const [sectionActive, setSectionActive] = useState<SectionTypeModel>('table');
 
     if (!isClient) return <></>
 
@@ -41,17 +35,16 @@ export const DashboardPage: FC<Props> = ({ tableViewData, personalData, boardVie
                 </div>
             </div>
 
-            <div>
+            {/* <div>
                 <button onClick={() => setSectionActive('table')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'table' ? ' bg-white' : '')} >
                     Tabella
                 </button>
                 <button onClick={() => setSectionActive('boards')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'boards' ? ' bg-white' : '')} >
                     Tutte le board
                 </button>
-            </div>
+            </div> */}
 
-            {sectionActive === 'table' && <TableView data={tableViewData} memberList={memberList} />}
-            {sectionActive === 'boards' && <BoardView data={boardViewData} />}
+            <TableView data={tableViewData} memberList={memberList} />
 
         </div>
 
