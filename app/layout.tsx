@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "evo · boards",
-  description: "Visualizza le tue liste e le tue card di Trello",
+  description: "Visualizza le card di tutte le board di Trello",
 };
 
 export default function RootLayout({
