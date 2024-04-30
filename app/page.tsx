@@ -1,62 +1,58 @@
 import { DashboardPage } from "@/components/pages/DashboardPage";
-import { TrelloBoardView, TrelloMember, TrelloMemberSmall, TrelloTableView } from "@/models/trello.model";
+import { TrelloBoardView, TrelloMemberSmall, TrelloTableView } from "@/models/trello.model";
 import { getBoardCards, getBoardLists, getBoardMembers, getBoards, getPersonalData } from "@/services/trello.service";
 
 export default async function Home() {
 
   let boardViewData: TrelloBoardView[] = [];
   let tableViewData: TrelloTableView[] = []
-  let personalData: TrelloMember | null = null
   let memberList: TrelloMemberSmall[] = [];
 
   const apiKey = process.env.TRELLO_API || '';
   const token = process.env.TRELLO_TOKEN || '';
 
-  try {
+  // Recupero i dati del profilo personale e le board in parallelo
+  const [currentMember, boards] = await Promise.all([
+    getPersonalData(apiKey, token),
+    getBoards(apiKey, token).then(boards => boards.filter(board => !board.closed))
+  ]);
 
-    // recupero i dati del mio profilo
-    personalData = await getPersonalData(apiKey, token);
+  // Ciclo le board per recuperare i relativi data
+  for (const board of boards) {
 
-    // recupero le board
-    let boards = await getBoards(apiKey, token);
-    boards = boards.filter(board => !board.closed);
+    const [lists, cards, members] = await Promise.all([
+      getBoardLists(apiKey, token, board.id),
+      getBoardCards(apiKey, token, board.id),
+      getBoardMembers(apiKey, token, board.id)
+    ]);
 
-    // Ciclo le board per recuperare i relativi data
-    for (const board of boards) {
+    // Aggiorna la lista dei membri unica
+    members.forEach(member => {
+      if (!memberList.some(m => m.id === member.id)) {
+        memberList.push(member);
+      }
+    });
 
-      const lists = await getBoardLists(apiKey, token, board.id);
-      const cards = await getBoardCards(apiKey, token, board.id);
-      const members = await getBoardMembers(apiKey, token, board.id);
+    // Preparo i dati per la dashboard
+    const tableViewDataEntries = cards.map(card => ({
+      name: card.name,
+      board: board.name,
+      column: lists.find(list => list.id === card.idList)?.name || '',
+      url: card.url,
+      idMembers: card.idMembers,
+      description: card.desc
+    }));
 
-      // Tengo traccia univoca dei membri presenti nelle varie board
-      members.forEach(member => {
-        const memberFound = memberList.find(m => m.id === member.id);
-        if (memberFound === undefined) memberList.push(member)
-      })
+    tableViewData.push(...tableViewDataEntries);
 
-      // popolo il field della dashboard tabella
-      cards.forEach(card => {
-
-        tableViewData.push({
-          name: card.name,
-          board: board.name,
-          column: lists.find(list => list.id === card.idList)?.name || '',
-          url: card.url,
-          idMembers: card.idMembers,
-          description: card.desc
-        })
-
-      })
-
-      // popolo il field delle dashboard board
-      boardViewData.push({ board, lists, cards })
-    }
-
-  } catch (error) {
-
-    console.error("Errore nel recuperare le board: ", error);
-
+    // Aggiungi dati alla vista della board
+    boardViewData.push({ board, lists, cards })
   }
 
-  return <DashboardPage personalData={personalData} tableViewData={tableViewData} boardViewData={boardViewData} memberList={memberList} />
+  return <DashboardPage
+    personalData={currentMember}
+    tableViewData={tableViewData}
+    boardViewData={boardViewData}
+    memberList={memberList}
+  />
 }
