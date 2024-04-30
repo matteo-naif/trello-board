@@ -5,14 +5,14 @@ import { Badge } from '../Badge';
 import { Card } from '../Card';
 
 type Props = {
-    items: TrelloBoardView[]
+    data: TrelloBoardView[]
 }
 
-export const BoardView: FC<Props> = ({ items }) => {
+export const BoardView: FC<Props> = ({ data }) => {
     return <>
 
         <div className="grid grid-cols-12 gap-6">
-            {items.map(({ board, cards, lists }) => {
+            {data.map(({ board, cards, lists }) => {
                 return <div className="col-span-12 lg:col-span-6 bg-white" key={board.id} >
                     <div className="p-6 block">
 

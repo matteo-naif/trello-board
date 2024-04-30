@@ -11,13 +11,13 @@ import { TableView } from './TableView';
 type SectionTypeModel = 'boards' | 'table'
 
 type Props = {
-    tableRows: TrelloTableView[],
+    tableViewData: TrelloTableView[],
     personalData: TrelloMember | null,
-    items: TrelloBoardView[],
+    boardViewData: TrelloBoardView[],
     memberList: TrelloMemberSmall[]
 }
 
-export const DashboardPage: FC<Props> = ({ tableRows, personalData, items, memberList }) => {
+export const DashboardPage: FC<Props> = ({ tableViewData, personalData, boardViewData, memberList }) => {
 
     const isClient = useIsClient()
 
@@ -50,8 +50,8 @@ export const DashboardPage: FC<Props> = ({ tableRows, personalData, items, membe
                 </button>
             </div>
 
-            {sectionActive === 'table' && <TableView data={tableRows} memberList={memberList} />}
-            {sectionActive === 'boards' && <BoardView items={items} />}
+            {sectionActive === 'table' && <TableView data={tableViewData} memberList={memberList} />}
+            {sectionActive === 'boards' && <BoardView data={boardViewData} />}
 
         </div>
 
