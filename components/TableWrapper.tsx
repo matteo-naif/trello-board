@@ -34,11 +34,12 @@ function TableWrapper<T>({ data, columns }: Props<T>) {
 										key={header.id}
 										className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'
 										colSpan={header.colSpan}
-										style={{ width: header.getSize() }}
+
 									>
 										{header.isPlaceholder
 											? null
 											: <div
+												style={{ width: header.getSize() }}
 												className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
 												onClick={header.column.getToggleSortingHandler()}
 												title={
@@ -70,7 +71,7 @@ function TableWrapper<T>({ data, columns }: Props<T>) {
 						{table.getRowModel().rows.map(row => (
 							<tr key={row.id} >
 								{row.getVisibleCells().map(cell => (
-									<td key={cell.id} className='whitespace-nowrap px-3 py-4 text-sm text-black' >
+									<td key={cell.id} className='px-3 py-4 text-sm text-black' >
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</td>
 								))}

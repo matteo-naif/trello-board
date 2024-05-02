@@ -126,13 +126,18 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
             {
                 accessorKey: 'column',
                 header: "Stato",
-                size: 100,
+                size: 150,
                 cell: (info) => (
-                    <div
+                    <span
                         style={{ backgroundColor: getStatusColor(info.row.original.column) }}
-                        className='px-2 py-1 inline rounded-xl text-white'>
-                        {info.row.original.column}
-                    </div>
+                        className='px-2 py-1 inline-block rounded-2xl text-white'
+                    >
+                        <div
+                        >
+                            {info.row.original.column}
+
+                        </div>
+                    </span>
                 )
             },
             {
