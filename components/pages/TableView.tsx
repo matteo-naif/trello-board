@@ -1,5 +1,13 @@
 "use client"
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
 import { getStatusColor } from '@/utils/color.util';
@@ -8,6 +16,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { MdLaunch } from 'react-icons/md';
 import { RemoveFilterButton } from '../RemoveFilterButton';
 import { TableWrapper } from '../TableWrapper';
+
 
 type Props = {
     data: TrelloTableView[],
@@ -194,12 +203,12 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                             </p>
                             {status.map(status => <div className='block' key={status}>
                                 <label className='flex gap-2 py-1 items-center cursor-pointer'>
-                                    <input
-                                        type="checkbox"
-                                        checked={filterStatusApplied.includes(status)}
+
+                                    <Switch checked={filterStatusApplied.includes(status)}
                                         value={status}
-                                        onChange={(e) => applyFilters('status', e.target.value)}
+                                        onCheckedChange={(e) => applyFilters('status', status)}
                                     />
+
                                     <div className='h-2 w-2 rounded-full' style={{ backgroundColor: getStatusColor(status) }} />
                                     <span>{status}</span>
                                 </label>
@@ -214,10 +223,16 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                                 Board
                                 {filterBoardApplied && <RemoveFilterButton onClick={() => setFilterBoardApplied("")} />}
                             </p>
-                            <select className='min-w-52' onChange={e => applyFilters('board', e.target.value)} value={filterBoardApplied}>
-                                <option value={""}>Tutte le board</option>
-                                {boardList.map(board => <option key={board} value={board} >{board}</option>)}
-                            </select>
+
+                            <Select onValueChange={e => applyFilters('board', e)} value={filterBoardApplied}>
+                                <SelectTrigger className='w-52'>
+                                    <SelectValue placeholder="Board" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {boardList.map(board => <SelectItem key={board} value={board}>{board}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+
                         </div>
 
                         {/* members */}
@@ -228,11 +243,10 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                             </p>
                             {memberList.map(member => <div className='block' key={member.id}>
                                 <label className='flex gap-2 py-1 items-center'>
-                                    <input
-                                        type="checkbox"
-                                        checked={filterMembersApplied.includes(member.id)}
+
+                                    <Switch checked={filterMembersApplied.includes(member.id)}
                                         value={member.id}
-                                        onChange={(e) => applyFilters('member', e.target.value)}
+                                        onCheckedChange={(e) => applyFilters('member', member.id)}
                                     />
                                     <span>{member.fullName}</span>
                                 </label>
