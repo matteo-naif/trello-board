@@ -8,12 +8,18 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { TrelloMemberSmall, TrelloTableView } from '@/models/trello.model';
 import { getStatusColor } from '@/utils/color.util';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { MdLaunch } from 'react-icons/md';
+import { MdInfoOutline, MdLaunch } from 'react-icons/md';
 import { RemoveFilterButton } from '../RemoveFilterButton';
 import { TableWrapper } from '../TableWrapper';
 
@@ -126,7 +132,23 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                 accessorKey: 'name',
                 header: "Ticket",
                 cell: (info) => (<>
-                    <p title={info.row.original.description}>{info.row.original.name}</p>
+
+
+
+                    <p className="flex items-center">{info.row.original.name}
+
+
+                        {info.row.original.description && <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger><MdInfoOutline className="h-5 w-5 opacity-40 hover:opacity-100 ml-2" /></TooltipTrigger>
+                                <TooltipContent className="max-w-sm">
+                                    {info.row.original.description}
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>}
+                    </p>
+
+
                     {/* Visualizzo i member assegnati */}
                     <small>{info.row.original.idMembers.map((member) => memberList.find(m => m.id === member)?.fullName).join(', ')}</small>
                 </>
