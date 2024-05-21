@@ -196,7 +196,12 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                 <div className="col-span-12 lg:col-span-9">
                     {data.length > 0
-                        ? <TableWrapper data={data} columns={columns} />
+                        ? <>
+                            <TableWrapper data={data} columns={columns} />
+                            <p className="mt-6 text-sm text-gray-400">
+                                Stai visualizzando {data.length} ticket
+                            </p>
+                        </>
                         : <div className='w-full bg-white px-6 py-12 rounded-2xl text-center'>
                             <p className="mb-6 text-xl">
                                 Non ci sono ticket
@@ -233,6 +238,7 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
 
                                     <div className='h-2 w-2 rounded-full' style={{ backgroundColor: getStatusColor(status) }} />
                                     <span>{status}</span>
+                                    <span className="text-xs text-gray-400 ">{data.filter(ticket => ticket.column === status).length}</span>
                                 </label>
                             </div>
                             )}
@@ -251,7 +257,13 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                                     <SelectValue placeholder="Board" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {boardList.map(board => <SelectItem key={board} value={board}>{board}</SelectItem>)}
+                                    {boardList.map(board => <SelectItem key={board} value={board} >
+                                        <span className="flex items-center gap-2">
+                                            {board}
+                                            <span className="text-xs text-gray-400 ">{data.filter(ticket => ticket.board === board).length}</span>
+                                        </span>
+                                    </SelectItem>)}
+
                                 </SelectContent>
                             </Select>
 
@@ -271,6 +283,7 @@ export const TableView: FC<Props> = ({ data: dataProps, memberList }) => {
                                         onCheckedChange={(e) => applyFilters('member', member.id)}
                                     />
                                     <span>{member.fullName}</span>
+                                    <span className="text-xs text-gray-400 ">{data.filter(ticket => ticket.idMembers.includes(member.id)).length}</span>
                                 </label>
                             </div>
                             )}
