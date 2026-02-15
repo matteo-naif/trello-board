@@ -1,7 +1,9 @@
+"use client";
+
 import { TrelloBoardView } from "@/models/trello.model";
-import { Accordion } from "../Accordion";
-import { Badge } from "../Badge";
-import { Card } from "../Card";
+import { Accordion } from "@/components/Accordion";
+import { Badge } from "@/components/Badge";
+import { Card } from "@/components/Card";
 
 type Props = {
   data: TrelloBoardView[];

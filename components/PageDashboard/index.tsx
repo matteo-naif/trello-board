@@ -6,7 +6,7 @@ import {
   TrelloMemberSmall,
   TrelloTableView,
 } from "@/models/trello.model";
-import { TableView } from "./TableView";
+import { TableView } from "@/components/TableView";
 
 type Props = {
   tableViewData: TrelloTableView[];
@@ -14,7 +14,7 @@ type Props = {
   memberList: TrelloMemberSmall[];
 };
 
-export const DashboardPage = (props: Props) => {
+export const PageDashboard = (props: Props) => {
   const { tableViewData, personalData, memberList } = props;
   const isClient = useIsClient();
 
@@ -35,16 +35,6 @@ export const DashboardPage = (props: Props) => {
           </a>
         </div>
       </div>
-
-      {/* <div>
-                <button onClick={() => setSectionActive('table')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'table' ? ' bg-white' : '')} >
-                    Tabella
-                </button>
-                <button onClick={() => setSectionActive('boards')} className={'py-2 px-4 mr-2 mb-2 rounded-xl ' + (sectionActive === 'boards' ? ' bg-white' : '')} >
-                    Tutte le board
-                </button>
-            </div> */}
-
       <TableView data={tableViewData} memberList={memberList} />
     </div>
   );

@@ -1,4 +1,4 @@
-import { DashboardPage } from "@/components/pages/DashboardPage";
+import { PageDashboard } from "@/components/PageDashboard";
 import { TrelloMemberSmall, TrelloTableView } from "@/models/trello.model";
 import {
   getBoardCards,
@@ -47,7 +47,7 @@ export default async function Home() {
   }
 
   return (
-    <DashboardPage
+    <PageDashboard
       personalData={currentMember}
       tableViewData={tableViewData}
       memberList={memberList}
