@@ -1,69 +1,53 @@
+import { endpointConfig } from "@/config/endpoint.config";
 import { TrelloBoard, TrelloCard, TrelloList, TrelloMember, TrelloMemberSmall } from "@/models/trello.model";
-import axios from "axios";
-
-const getTrelloKeyAndToken = () => {
-    const apiKey = process.env.TRELLO_API || '';
-    const token = process.env.TRELLO_TOKEN || '';
-    if (!apiKey || !token) throw new Error('Missing TRELLO_API or TRELLO_TOKEN environment variable');
-    return { apiKey, token };
-}
+import { trelloGet } from "@/utils/trelloClient";
 
 export const getPersonalData = async (): Promise<TrelloMember | null> => {
     try {
-        const { apiKey, token } = getTrelloKeyAndToken();
-        // https://developer.atlassian.com/cloud/trello/rest/api-group-members/#api-members-me-get
-        let { data } = await axios.get<TrelloMember>(`https://api.trello.com/1/members/me?key=${apiKey}&token=${token}`);
-        return data
-    } catch (error) {
-        console.error('[getPersonalData]', error);
+        return await trelloGet<TrelloMember>(endpointConfig.personalData, {
+            logContext: "getPersonalData",
+        });
+    } catch {
         return null;
     }
 }
 
 export const getBoards = async (): Promise<TrelloBoard[]> => {
     try {
-        const { apiKey, token } = getTrelloKeyAndToken();
-        // https://developer.atlassian.com/cloud/trello/rest/api-group-members/#api-members-id-boards-get
-        let { data } = await axios.get<TrelloBoard[]>(`https://api.trello.com/1/members/me/boards?key=${apiKey}&token=${token}`);
-        return data;
-    } catch (error) {
-        console.error('[getBoards]', error);
+        return await trelloGet<TrelloBoard[]>(endpointConfig.boards, {
+            logContext: "getBoards",
+        });
+    } catch {
         return [];
     }
 }
 
 export const getBoardLists = async (boardId: string): Promise<TrelloList[]> => {
     try {
-        const { apiKey, token } = getTrelloKeyAndToken();
-        // https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-lists-get
-        let { data } = await axios.get<TrelloList[]>(`https://api.trello.com/1/boards/${boardId}/lists?key=${apiKey}&token=${token}`);
-        return data
-    } catch (error) {
-        console.error('[getBoardLists]', error);
+        return await trelloGet<TrelloList[]>(endpointConfig.boardLists(boardId), {
+            logContext: "getBoardLists",
+        });
+    } catch {
         return [];
     }
 }
 
-export const getBoardCards = async (boardId: string) => {
+export const getBoardCards = async (boardId: string): Promise<TrelloCard[]> => {
     try {
-        const { apiKey, token } = getTrelloKeyAndToken();
-        // https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-cards-get
-        let { data } = await axios.get<TrelloCard[]>(`https://api.trello.com/1/boards/${boardId}/cards?key=${apiKey}&token=${token}`);
-        return data
-    } catch (error) {
-        console.error('[getBoardCards]', error);
+        return await trelloGet<TrelloCard[]>(endpointConfig.boardCards(boardId), {
+            logContext: "getBoardCards",
+        });
+    } catch {
         return [];
     }
 }
 
-export const getBoardMembers = async (boardId: string) => {
+export const getBoardMembers = async (boardId: string): Promise<TrelloMemberSmall[]> => {
     try {
-        const { apiKey, token } = getTrelloKeyAndToken();
-        // https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-get
-        let { data } = await axios.get<TrelloMemberSmall[]>(`https://api.trello.com/1/boards/${boardId}/members?key=${apiKey}&token=${token}`);
-        return data;
-    } catch (error) {
-        console.error('[getBoardMembers]', error);
+        return await trelloGet<TrelloMemberSmall[]>(endpointConfig.boardMembers(boardId), {
+            logContext: "getBoardMembers",
+        });
+    } catch {
         return [];
     }
 }
