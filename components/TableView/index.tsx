@@ -48,19 +48,6 @@ export const TableView = (props: Props) => {
     "",
   );
 
-  useEffect(() => {
-    const statusLocal: string[] = [];
-    const boardLocal: string[] = [];
-
-    dataProps.forEach(({ column, board }) => {
-      if (!statusLocal.includes(column)) statusLocal.push(column);
-      if (!boardLocal.includes(board)) boardLocal.push(board);
-    });
-
-    setStatus(statusLocal);
-    setBoardList(boardLocal);
-  }, [dataProps]);
-
   const applyFilters = (type: "board" | "status" | "member", value: string) => {
     if (type === "status") {
       let filterStatusAppliedLocal = [...filterStatusApplied];
@@ -101,6 +88,19 @@ export const TableView = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    const statusLocal: string[] = [];
+    const boardLocal: string[] = [];
+
+    dataProps.forEach(({ column, board }) => {
+      if (!statusLocal.includes(column)) statusLocal.push(column);
+      if (!boardLocal.includes(board)) boardLocal.push(board);
+    });
+
+    setStatus(statusLocal);
+    setBoardList(boardLocal);
+  }, [dataProps]);
+
   // Al cambio dei filtri aggiorno la lista dei ticket in base ai nuovi valori
   useEffect(() => {
     // Filtra i dati
@@ -136,7 +136,7 @@ export const TableView = (props: Props) => {
         header: "Ticket",
         cell: (info) => (
           <>
-            <p className="flex items-center">
+            <p className="flex items-center max-w-xl">
               {info.row.original.name}
 
               {info.row.original.description && (
@@ -202,15 +202,15 @@ export const TableView = (props: Props) => {
   );
 
   return (
-    <div className="grid grid-cols-12 gap-12">
+    <div className="grid lg:grid-cols-12 gap-12">
       <div className="col-span-12 lg:col-span-9">
         {data.length > 0 ? (
-          <>
+          <div>
             <TableWrapper data={data} columns={columns} />
             <p className="mt-6 text-sm text-gray-400">
               Stai visualizzando {data.length} ticket
             </p>
-          </>
+          </div>
         ) : (
           <div className="w-full bg-white px-6 py-12 rounded-2xl text-center">
             <p className="mb-6 text-xl">Non ci sono ticket</p>
