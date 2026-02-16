@@ -18,25 +18,37 @@ Questa applicazione Next.js fornisce una panoramica rapida e personalizzabile de
 
 - Recupero dati real-time da Trello via REST API (axios)
 - Gestione di board, liste, card e membri (`trello.service.ts` + tipi in `trello.model.ts`)
-- Viste multiple: `BoardView`, `TableView`, `DashboardPage`
+- Endpoint Trello centralizzati in `endpoint.config.ts`
+- Client Trello con retry/backoff e logging sicuro degli errori (`trelloClient.ts`)
+- Viste multiple: `BoardView`, `TableView`, `PageDashboard`
 - Tabella reattiva con `@tanstack/react-table`
 - Conversione tempo / utilità varie (`TimeConverter.tsx`, `utils/`)
 - Persistenza preferenze utente (`useLocalStorage` hook)
 - Componenti UI personalizzati e styling con Tailwind CSS + Radix UI
+- Manifest e icone web app (`app/manifest.json`, `public/`)
 
 ## 🏗️ Architettura & Struttura Cartelle
 
 ```
-app/              # Routing Next.js (App Router), layout globale e pagina iniziale
+app/              # Routing Next.js (App Router), layout globale e manifest
 components/       # Componenti riutilizzabili e viste principali
-	pages/          # BoardView, DashboardPage, TableView
-	ui/             # Wrapper Radix (select, switch, tooltip)
+  Accordion/
+  Badge/
+  BoardView/
+  ButtonRemoveFilter/
+  Card/
+  PageDashboard/
+  TableView/
+  TableWrapper/
+  TimeConverter/
+  ui/             # Wrapper Radix (select, switch, tooltip)
+config/           # Configurazioni endpoint Trello
 hooks/            # Hooks custom (es. useLocalStorage, useIsClient)
-services/         # Chiamate alle API Trello (axios + env vars)
+services/         # Chiamate alle API Trello (trelloClient)
 models/           # Tipi/Interfacce TypeScript per oggetti Trello
 lib/              # Utils generici
-utils/            # Utility di formattazione (es. colori)
-public/           # Assets statici
+utils/            # Utility e client Trello
+public/           # Assets statici (icone manifest)
 tailwind.config.ts# Configurazione Tailwind
 ```
 
@@ -95,7 +107,7 @@ pnpm lint
 ## 📦 Tipi & Service
 
 - Tipi definiti in `models/trello.model.ts` (Board, Card, List, Member, ecc.)
-- Funzioni di fetch in `services/trello.service.ts`:
+- Funzioni di fetch in `services/trello.service.ts` con `trelloClient.ts` e `endpoint.config.ts`:
   - `getPersonalData()`
   - `getBoards()`
   - `getBoardLists(boardId)`
@@ -104,8 +116,8 @@ pnpm lint
 
 ## 🗂 Viste Principali
 
-- `DashboardPage`: panoramica sintetica
-- `BoardView`: dettaglio board con liste e card
+- `PageDashboard`: panoramica sintetica
+- `BoardView`: dettaglio board con liste e card (non abilitato)
 - `TableView`: rappresentazione tabellare aggregata (ricerca / filtro)
 
 ## 💾 Stato & Persistenza
